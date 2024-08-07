@@ -4,9 +4,9 @@ networks:
     driver: bridge
 
 services:
-  users-read:
-    image: users-read
-    container_name: users-read
+  users-query:
+    image: users-query
+    container_name: users-query
     networks:
       - users-net
     ports:
@@ -14,9 +14,9 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
 
-  users-cud:
-    image: users-cud
-    container_name: users-cud
+  users-command:
+    image: users-command
+    container_name: users-command
     networks:
       - users-net
     ports:
@@ -24,9 +24,9 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
 
-  users-api:
-    image: users-api
-    container_name: users-api
+  users-api-gateway:
+    image: users-api-gateway
+    container_name: users-api-gateway
     networks:
       - users-net
     ports:

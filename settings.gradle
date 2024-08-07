@@ -1,4 +1,4 @@
-rootProject.name = 'users-root'
-include 'users-cud'
-include 'users-read'
-include 'users-api'
+rootProject.name = 'users-cqsr'
+include 'users-command'
+include 'users-query'
+include 'users-api-gateway'
