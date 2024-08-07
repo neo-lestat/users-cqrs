@@ -1,0 +1,4 @@
+rootProject.name = 'users-root'
+include 'users-cud'
+include 'users-read'
+include 'users-api'

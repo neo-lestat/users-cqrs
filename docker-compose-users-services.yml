@@ -1,0 +1,35 @@
+
+networks:
+  users-net:
+    driver: bridge
+
+services:
+  users-read:
+    image: users-read
+    container_name: users-read
+    networks:
+      - users-net
+    ports:
+      - 8081:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  users-cud:
+    image: users-cud
+    container_name: users-cud
+    networks:
+      - users-net
+    ports:
+      - 8082:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  users-api:
+    image: users-api
+    container_name: users-api
+    networks:
+      - users-net
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker

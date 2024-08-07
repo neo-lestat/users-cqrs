@@ -1,0 +1,57 @@
+
+networks:
+  users-net:
+    driver: bridge
+
+services:
+  zookeeper-server:
+    image: bitnami/zookeeper:latest
+    container_name: zookeeper-server
+    networks:
+      - users-net
+    ports:
+      - 2181:2181
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka-server:
+    image: bitnami/kafka:latest
+    container_name: kafka-server
+    networks:
+      - users-net
+    ports:
+      - 9092:9092
+      - 29092:29092
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-server:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-server:9092,PLAINTEXT_HOST://localhost:29092
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CREATE_TOPICS=USERS_UPDATE:1:1,USERS_DELETE:1:1
+    depends_on:
+      - zookeeper-server
+  akhq:
+    image: tchiotludo/akhq:0.22.0
+    networks:
+      - users-net
+    ports:
+      - 9080:8080
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            docker-kafka-server:
+              properties:
+                bootstrap.servers: "kafka-server:9092"
+
+#  users-cud:
+#    image: users-cud
+#    container_name: users-cud
+#    networks:
+#      - users-net
+#    ports:
+#      - 8082:8080
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
