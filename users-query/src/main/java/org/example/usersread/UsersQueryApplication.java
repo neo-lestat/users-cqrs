@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication(scanBasePackages = "org.example.usersread.infrastructure")
-public class UsersReadApplication {
+public class UsersQueryApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UsersReadApplication.class, args);
+        SpringApplication.run(UsersQueryApplication.class, args);
     }
 
 }
