@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication(scanBasePackages = "org.example.users.infrastructure")
-public class UsersCudApplication {
+public class UsersCommandApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UsersCudApplication.class, args);
+        SpringApplication.run(UsersCommandApplication.class, args);
     }
 
 }
