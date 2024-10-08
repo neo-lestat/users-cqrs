@@ -3,17 +3,13 @@ package org.example.users.application.service;
 import org.example.users.application.messaging.UserEventsProducer;
 import org.example.users.application.randomgenerator.UserGenerator;
 import org.example.users.application.repository.UserRepository;
-import org.example.users.application.usecase.DeleteUserUseCase;
-import org.example.users.application.usecase.GenerateUsersUseCase;
-import org.example.users.application.usecase.SaveUserUseCase;
-import org.example.users.application.usecase.UpdateUserUseCase;
 import org.example.users.domain.model.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Transactional
-public class UserService implements DeleteUserUseCase, GenerateUsersUseCase, SaveUserUseCase, UpdateUserUseCase  {
+public class UserService {
 
     private final UserRepository userRepository;
     private final UserGenerator userGenerator;
