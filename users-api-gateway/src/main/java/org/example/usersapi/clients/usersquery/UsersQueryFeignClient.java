@@ -1,4 +1,4 @@
-package org.example.usersapi.clients.usersread;
+package org.example.usersapi.clients.usersquery;
 
 import org.example.usersapi.dto.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @FeignClient(value = "usersReadClient", url = "${users.read.service.url}/api/users")
-public interface UsersReadFeignClient {
+public interface UsersQueryFeignClient {
 
     @GetMapping(params = {"page", "size"})
     List<UserDto> getUsers(@RequestParam("page") int page, @RequestParam("size") int size);

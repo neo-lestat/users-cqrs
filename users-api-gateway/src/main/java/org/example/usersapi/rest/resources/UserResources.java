@@ -6,8 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import org.example.usersapi.clients.userscud.UsersCudFeignClient;
-import org.example.usersapi.clients.usersread.UsersReadFeignClient;
+import org.example.usersapi.clients.userscommand.UsersCommandFeignClient;
+import org.example.usersapi.clients.usersquery.UsersQueryFeignClient;
 import org.example.usersapi.dto.UserDto;
 import org.example.usersapi.rest.exception.ErrorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,22 +34,22 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 public class UserResources {
 
-    private final UsersCudFeignClient usersCudFeignClient;
-    private final UsersReadFeignClient usersReadFeignClient;
+    private final UsersCommandFeignClient usersCommandFeignClient;
+    private final UsersQueryFeignClient usersQueryFeignClient;
 
 
     @Autowired
-    public UserResources(UsersCudFeignClient usersCudFeignClient,
-                         UsersReadFeignClient usersReadFeignClient) {
-        this.usersCudFeignClient = usersCudFeignClient;
-        this.usersReadFeignClient = usersReadFeignClient;
+    public UserResources(UsersCommandFeignClient usersCommandFeignClient,
+                         UsersQueryFeignClient usersQueryFeignClient) {
+        this.usersCommandFeignClient = usersCommandFeignClient;
+        this.usersQueryFeignClient = usersQueryFeignClient;
     }
 
     @Operation(summary = "Get users with pagination")
     @GetMapping(params = {"page", "size"})
     public ResponseEntity<List<UserDto>> getUsers(@RequestParam("page") int page,
                                                   @RequestParam("size") int size) {
-        return new ResponseEntity<>(usersReadFeignClient.getUsers(page, size),
+        return new ResponseEntity<>(usersQueryFeignClient.getUsers(page, size),
                 HttpStatus.OK);
     }
 
@@ -61,7 +61,7 @@ public class UserResources {
     })
     @GetMapping("/{username}")
     public ResponseEntity<UserDto> getUser(@PathVariable("username") String username) {
-        return new ResponseEntity<>(usersReadFeignClient.getUser(username),
+        return new ResponseEntity<>(usersQueryFeignClient.getUser(username),
                 HttpStatus.OK);
     }
 
@@ -69,7 +69,7 @@ public class UserResources {
     @ApiResponse(responseCode = "200", description = "Return a map with users grouped by country, state and city")
     @GetMapping("/tree")
     public ResponseEntity<Map<String, Map<String, Map<String, List<UserDto>>>>> getUserTree() {
-        List<UserDto> userDtoList = usersReadFeignClient.getUsers(0, 100);
+        List<UserDto> userDtoList = usersQueryFeignClient.getUsers(0, 100);
         Map<String, Map<String, Map<String, List<UserDto>>>> maps = new HashMap<>();
         userDtoList.forEach(userDto -> {
             maps.computeIfAbsent(userDto.country(), k -> new HashMap<>())
@@ -86,7 +86,7 @@ public class UserResources {
             content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) })
     @PostMapping
     public ResponseEntity<UserDto> saveUser(@Valid @RequestBody UserDto userDto) {
-        return new ResponseEntity<>(usersCudFeignClient.saveUser(userDto),
+        return new ResponseEntity<>(usersCommandFeignClient.saveUser(userDto),
                 HttpStatus.CREATED);
     }
 
@@ -96,7 +96,7 @@ public class UserResources {
             content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) })
     @PutMapping("/{username}")
     public ResponseEntity<UserDto> updateUser(@PathVariable("username") String username, @Valid @RequestBody UserDto userDto) {
-        return new ResponseEntity<>(usersCudFeignClient.updateUser(username, userDto),
+        return new ResponseEntity<>(usersCommandFeignClient.updateUser(username, userDto),
                 HttpStatus.ACCEPTED);
     }
 
@@ -106,7 +106,7 @@ public class UserResources {
             content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) })
     @DeleteMapping("/{username}")
     public ResponseEntity<String> deleteUser(@PathVariable("username") String username) {
-        usersCudFeignClient.deleteUser(username);
+        usersCommandFeignClient.deleteUser(username);
         return ResponseEntity.ok().build();
     }
 
@@ -114,7 +114,7 @@ public class UserResources {
     @ApiResponse(responseCode = "200", description = "Return a list of generated users")
     @GetMapping("/generate/{number}")
     public ResponseEntity<List<UserDto>> generateUsers(@PathVariable Integer number) {
-        return new ResponseEntity<>(usersCudFeignClient.generateUsers(Optional.ofNullable(number).orElse(1)),
+        return new ResponseEntity<>(usersCommandFeignClient.generateUsers(Optional.ofNullable(number).orElse(1)),
                 HttpStatus.OK);
     }
 }

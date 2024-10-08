@@ -1,4 +1,4 @@
-package org.example.usersapi.clients.userscud;
+package org.example.usersapi.clients.userscommand;
 
 import org.example.usersapi.dto.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 @FeignClient(value = "usersCudClient", url = "${users.cud.service.url}/api/users")
-public interface UsersCudFeignClient {
+public interface UsersCommandFeignClient {
 
     @PostMapping
     UserDto saveUser(@RequestBody UserDto userDto);
