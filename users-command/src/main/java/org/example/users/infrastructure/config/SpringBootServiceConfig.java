@@ -15,17 +15,21 @@ import java.util.Properties;
 @Configuration
 public class SpringBootServiceConfig {
 
+    /*
+     * this is not working with usecases so no transaction between database and kafka
+     */
+    /*
     @Autowired
     private PlatformTransactionManager transactionManager;
 
     @Bean
     public UserService userService(UserRepository userRepository, UserGenerator userGenerator,
-                                   UserEventsKafkaProducer userEventsKafkaProducer) {
+                              UserEventsKafkaProducer userEventsKafkaProducer) {
         TransactionProxyFactoryBean proxy = new TransactionProxyFactoryBean();
         // Inject transaction manager here
         proxy.setTransactionManager(transactionManager);
 
-        // Define wich object instance is to be proxied (your bean)
+        // Define which object instance is to be proxied (your bean)
         proxy.setTarget(new UserService(userRepository, userGenerator, userEventsKafkaProducer));
 
         // Programmatically setup transaction attributes
@@ -36,6 +40,12 @@ public class SpringBootServiceConfig {
         // Finish FactoryBean setup
         proxy.afterPropertiesSet();
         return (UserService) proxy.getObject();
+    }*/
+
+    @Bean
+    public UserService userService(UserRepository userRepository, UserGenerator userGenerator,
+                                   UserEventsKafkaProducer userEventsKafkaProducer) {
+        return new UserService(userRepository, userGenerator, userEventsKafkaProducer);
     }
 
 }

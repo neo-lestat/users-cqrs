@@ -3,6 +3,7 @@ package org.example.usersread.infrastructure.messaging;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.usersread.application.messaging.UserEventsListener;
+import org.example.usersread.application.service.UserCommand;
 import org.example.usersread.application.service.UserService;
 import org.example.usersread.domain.model.User;
 import org.example.usersread.infrastructure.messaging.dto.UserMessageDto;
@@ -26,15 +27,15 @@ public class UserEventsKafkaListener implements UserEventsListener {
 
     private final UserMessageMapper userMessageMapper;
     private final ObjectMapper objectMapper;
-    private final UserService userService;
+    private final UserCommand userCommand;
 
     @Autowired
     public UserEventsKafkaListener(ObjectMapper objectMapper,
                                    UserMessageMapper userMessageMapper,
-                                   UserService userService) {
+                                   UserCommand userCommand) {
         this.objectMapper = objectMapper;
         this.userMessageMapper = userMessageMapper;
-        this.userService = userService;
+        this.userCommand = userCommand;
     }
 
     private Optional<UserMessageDto> getUser(String data) {
@@ -53,7 +54,7 @@ public class UserEventsKafkaListener implements UserEventsListener {
     public void listenUpdateMessage(String data) {
         getUser(data).ifPresent(userMessageDto -> {
             User user = userMessageMapper.toDomain(userMessageDto);
-            userService.saveOrUpdate(user);
+            userCommand.saveOrUpdate(user);
             LOGGER.info("User updated: {}", user);
         });
     }
@@ -61,6 +62,6 @@ public class UserEventsKafkaListener implements UserEventsListener {
     @KafkaListener(id = "deletemessage", topics = USERS_DELETE_TOPIC, clientIdPrefix = "myClientId")
     @Override
     public void listenDeleteMessage(String username) {
-        userService.delete(username);
+        userCommand.delete(username);
     }
 }

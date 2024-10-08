@@ -13,7 +13,11 @@ import java.util.Properties;
 @Configuration
 public class SpringBootServiceConfig {
 
-    @Autowired
+    /*
+     * this is not working with usecases so no transaction database
+     */
+    /*
+    /*@Autowired
     private PlatformTransactionManager transactionManager;
 
     @Bean
@@ -33,6 +37,12 @@ public class SpringBootServiceConfig {
         // Finish FactoryBean setup
         proxy.afterPropertiesSet();
         return (UserService) proxy.getObject();
+    }*/
+
+    @Bean
+    public UserService userService(UserRepository userRepository) {
+        return new UserService(userRepository);
     }
+
 
 }

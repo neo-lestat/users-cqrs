@@ -1,6 +1,7 @@
 package org.example.usersread.application.service;
 
 import org.example.usersread.application.repository.UserRepository;
+import org.example.usersread.application.usecase.GetUserUseCase;
 import org.example.usersread.domain.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Transactional
-public class UserService {
+public class UserService implements GetUserUseCase, UserCommand {
 
     private final UserRepository userRepository;
 

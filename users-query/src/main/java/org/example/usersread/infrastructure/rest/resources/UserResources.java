@@ -1,6 +1,6 @@
 package org.example.usersread.infrastructure.rest.resources;
 
-import org.example.usersread.application.service.UserService;
+import org.example.usersread.application.usecase.GetUserUseCase;
 import org.example.usersread.domain.model.User;
 import org.example.usersread.infrastructure.rest.dto.UserDto;
 import org.example.usersread.infrastructure.rest.exception.UserPageNotFoundException;
@@ -24,19 +24,19 @@ import java.util.Map;
 @RequestMapping("/api/users")
 public class UserResources {
 
-    private final UserService userService;
+    private final GetUserUseCase getUserUseCase;
     private final UserMapper userMapper;
 
     @Autowired
-    public UserResources(UserService userService, UserMapper userMapper) {
-        this.userService = userService;
+    public UserResources(GetUserUseCase getUserUseCase, UserMapper userMapper) {
+        this.getUserUseCase = getUserUseCase;
         this.userMapper = userMapper;
     }
 
     @GetMapping(params = {"page", "size"})
     public ResponseEntity<List<UserDto>> getUsers(@RequestParam("page") int page,
                                                   @RequestParam("size") int size) {
-        Page<User> pageUser = userService.getUsers(page, size);
+        Page<User> pageUser = getUserUseCase.getUsers(page, size);
         if (page > pageUser.getTotalPages()) {
             throw new UserPageNotFoundException("Page not found");
         }
@@ -46,14 +46,14 @@ public class UserResources {
 
     @GetMapping("/{username}")
     public ResponseEntity<UserDto> getUser(@PathVariable("username") String username) {
-        return new ResponseEntity<>(userMapper.toDto(userService.getUser(username)),
+        return new ResponseEntity<>(userMapper.toDto(getUserUseCase.getUser(username)),
                 HttpStatus.OK);
     }
 
     @GetMapping("/tree")
     public ResponseEntity<Map<String, Map<String, Map<String, List<UserDto>>>>> getUserTree() {
         //return ResponseEntity.ok().build();
-        Page<User> pageUser = userService.getUsers(0, 100);
+        Page<User> pageUser = getUserUseCase.getUsers(0, 100);
         List<UserDto> userDtoList = userMapper.toDto(pageUser.getContent());
         Map<String, Map<String, Map<String, List<UserDto>>>> maps = new HashMap<>();
         userDtoList.forEach(userDto -> {
