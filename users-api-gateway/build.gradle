@@ -66,6 +66,10 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+tasks.withType(AbstractTestTask).configureEach {
+    failOnNoDiscoveredTests = false
+}
+
 rewrite {
 	activeRecipe("org.openrewrite.java.migrate.UpgradeToJava21")
 	activeRecipe("org.openrewrite.java.spring.boot4.UpgradeSpringBoot_4_0")
