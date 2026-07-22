@@ -5,7 +5,6 @@ import org.example.users.application.service.UserService;
 import org.example.users.domain.model.User;
 import org.example.users.infrastructure.rest.dto.UserDto;
 import org.example.users.infrastructure.rest.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +28,6 @@ public class UserResources {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @Autowired
     public UserResources(UserService userService, UserMapper userMapper) {
         this.userService = userService;
         this.userMapper = userMapper;

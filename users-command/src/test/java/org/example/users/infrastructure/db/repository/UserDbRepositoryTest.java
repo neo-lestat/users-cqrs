@@ -66,11 +66,11 @@ class UserDbRepositoryTest {
         List<User> users = List.of(user, UserBuilder.builder(user).username("test2").build());
         when(springDataUserRepository.findById(anyString())).thenReturn(Optional.empty());
         when(springDataUserRepository.saveAll(any(List.class))).
-                thenReturn(List.of(buildEntityFromDomain(users.get(0)), buildEntityFromDomain(users.get(1))));
+                thenReturn(List.of(buildEntityFromDomain(users.getFirst()), buildEntityFromDomain(users.get(1))));
         List<User> result = userDbRepository.save(users);
         assertNotNull(result);
         assertEquals(users.size(), result.size());
-        assertEquals(users.get(0), result.get(0));
+        assertEquals(users.getFirst(), result.getFirst());
         assertEquals(users.get(1), result.get(1));
         verify(springDataUserRepository, times(1)).saveAll(any(List.class));
     }
@@ -81,12 +81,12 @@ class UserDbRepositoryTest {
         List<User> users = List.of(user, UserBuilder.builder(user).build());
         when(springDataUserRepository.findById(anyString())).thenReturn(Optional.empty());
         when(springDataUserRepository.saveAll(any(List.class))).
-                thenReturn(List.of(buildEntityFromDomain(users.get(0))));
+                thenReturn(List.of(buildEntityFromDomain(users.getFirst())));
         List<User> result = userDbRepository.save(users);
         //todo use capture to verify the list of users that saveAll receives
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertEquals(users.get(0), result.get(0));
+        assertEquals(users.getFirst(), result.getFirst());
         verify(springDataUserRepository, times(1)).saveAll(any(List.class));
     }
 

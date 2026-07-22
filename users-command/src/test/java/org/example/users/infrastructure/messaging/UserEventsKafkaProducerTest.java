@@ -1,7 +1,6 @@
 package org.example.users.infrastructure.messaging;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import org.example.users.domain.model.User;
 import org.example.users.domain.model.UserBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.kafka.core.KafkaTemplate;
+import tools.jackson.core.JacksonException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +40,7 @@ class UserEventsKafkaProducerTest {
     }
 
     @Test
-    public void testSendCreatedMessageWhenUserIsValid() throws JsonProcessingException {
+    public void testSendCreatedMessageWhenUserIsValid() throws JacksonException {
         User user = buildUser();
         when(objectMapper.writeValueAsString(any())).thenReturn("message");
         userEventsKafkaProducer.sendCreatedMessage(user);
@@ -48,9 +48,9 @@ class UserEventsKafkaProducerTest {
     }
 
     @Test
-    public void testSendCreatedMessageWhenJsonProcessingFailsDoesNotSendMessage() throws JsonProcessingException {
+    public void testSendCreatedMessageWhenJsonProcessingFailsDoesNotSendMessage() throws JacksonException {
         User user = buildUser();
-        when(objectMapper.writeValueAsString(any())).thenThrow(JsonProcessingException.class);
+        when(objectMapper.writeValueAsString(any())).thenThrow(JacksonException.class);
         userEventsKafkaProducer.sendCreatedMessage(user);
         verify(kafkaTemplate, times(0)).send(anyString(), anyString(), anyString());
     }
@@ -63,7 +63,7 @@ class UserEventsKafkaProducerTest {
     }
 
     @Test
-    public void testSendCreatedMessageWhenUserListIsValidSendsMessages() throws JsonProcessingException {
+    public void testSendCreatedMessageWhenUserListIsValidSendsMessages() throws JacksonException {
         List<User> users = Arrays.asList(buildUser(), buildUser());
         when(objectMapper.writeValueAsString(any())).thenReturn("message");
         userEventsKafkaProducer.sendCreatedMessage(users);
@@ -71,9 +71,9 @@ class UserEventsKafkaProducerTest {
     }
 
     @Test
-    public void testSendCreatedMessageWhenUserListContainsInvalidUserDoesNotSendAllMessages() throws JsonProcessingException {
+    public void testSendCreatedMessageWhenUserListContainsInvalidUserDoesNotSendAllMessages() throws JacksonException {
         List<User> users = Arrays.asList(buildUser(), UserBuilder.builder(buildUser()).username("test2").build());
-        when(objectMapper.writeValueAsString(any())).thenReturn("message").thenThrow(JsonProcessingException.class);
+        when(objectMapper.writeValueAsString(any())).thenReturn("message").thenThrow(JacksonException.class);
         userEventsKafkaProducer.sendCreatedMessage(users);
         verify(kafkaTemplate, times(1)).send(anyString(), anyString(), anyString());
     }

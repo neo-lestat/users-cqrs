@@ -1,7 +1,6 @@
 package org.example.usersread.testcontainers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import org.example.usersread.infrastructure.messaging.dto.UserMessageDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
+import tools.jackson.core.JacksonException;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -44,7 +44,7 @@ public class LocalTestsKafkaProducer {
         Optional<String> message;
         try {
             message = Optional.ofNullable(objectMapper.writeValueAsString(user));
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             logger.error("Error generating json message {} ", user, e);
             message = Optional.empty();
         }

@@ -10,7 +10,6 @@ import org.example.usersapi.clients.userscommand.UsersCommandFeignClient;
 import org.example.usersapi.clients.usersquery.UsersQueryFeignClient;
 import org.example.usersapi.dto.UserDto;
 import org.example.usersapi.rest.exception.ErrorResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,7 +37,6 @@ public class UserResources {
     private final UsersQueryFeignClient usersQueryFeignClient;
 
 
-    @Autowired
     public UserResources(UsersCommandFeignClient usersCommandFeignClient,
                          UsersQueryFeignClient usersQueryFeignClient) {
         this.usersCommandFeignClient = usersCommandFeignClient;

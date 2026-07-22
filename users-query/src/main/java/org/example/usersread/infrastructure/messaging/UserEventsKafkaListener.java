@@ -1,7 +1,6 @@
 package org.example.usersread.infrastructure.messaging;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import org.example.usersread.application.messaging.UserEventsListener;
 import org.example.usersread.application.service.UserProjectionService;
 import org.example.usersread.domain.model.User;
@@ -9,10 +8,10 @@ import org.example.usersread.infrastructure.messaging.dto.UserMessageDto;
 import org.example.usersread.infrastructure.messaging.mapper.UserMessageMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tools.jackson.core.JacksonException;
 
 import java.util.Optional;
 
@@ -28,7 +27,6 @@ public class UserEventsKafkaListener implements UserEventsListener {
     private final ObjectMapper objectMapper;
     private final UserProjectionService userProjectionService;
 
-    @Autowired
     public UserEventsKafkaListener(ObjectMapper objectMapper,
                                    UserMessageMapper userMessageMapper,
                                    UserProjectionService userProjectionService) {
@@ -41,7 +39,7 @@ public class UserEventsKafkaListener implements UserEventsListener {
         Optional<UserMessageDto> user;
         try {
             user = Optional.of(objectMapper.readValue(data, UserMessageDto.class));
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             LOGGER.error("Error generating json message {} ", data, e);
             user = Optional.empty();
         }

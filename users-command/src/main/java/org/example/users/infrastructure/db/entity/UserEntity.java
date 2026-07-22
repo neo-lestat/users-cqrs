@@ -30,6 +30,7 @@ public class UserEntity {
     private String state;
     @NotBlank(message = "City is mandatory")
     private String city;
+    //add event_type, ocurrenceat, eventid ?
 
     public String getUsername() {
         return username;

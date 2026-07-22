@@ -5,7 +5,6 @@ import org.example.usersread.domain.model.User;
 import org.example.usersread.infrastructure.rest.dto.UserDto;
 import org.example.usersread.infrastructure.rest.exception.UserPageNotFoundException;
 import org.example.usersread.infrastructure.rest.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,6 @@ public class UserResources {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @Autowired
     public UserResources(UserService userService, UserMapper userMapper) {
         this.userService = userService;
         this.userMapper = userMapper;

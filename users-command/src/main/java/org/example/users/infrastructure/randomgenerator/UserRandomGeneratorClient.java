@@ -4,7 +4,6 @@ import org.example.users.application.randomgenerator.UserGenerator;
 import org.example.users.domain.model.User;
 import org.example.users.infrastructure.randomgenerator.dto.Root;
 import org.example.users.infrastructure.randomgenerator.mapper.RootMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -16,7 +15,6 @@ public class UserRandomGeneratorClient implements UserGenerator {
     private final RestClient restClient;
     private RootMapper rootMapper;
 
-    @Autowired
     public UserRandomGeneratorClient(RootMapper rootMapper) {
         this.restClient = RestClient.create();
         this.rootMapper = rootMapper;
