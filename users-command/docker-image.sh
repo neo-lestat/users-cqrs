@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t users-cud .
+docker build -t users-command .

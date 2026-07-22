@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t users-api .
+docker build -t users-api-gateway .
