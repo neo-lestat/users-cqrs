@@ -1,6 +1,7 @@
 package org.example.usersread.infrastructure.db.repository;
 
-import org.example.usersread.application.repository.UserRepository;
+import org.example.usersread.application.repository.UserProjectionRepository;
+import org.example.usersread.application.repository.UserReadRepository;
 import org.example.usersread.domain.model.User;
 import org.example.usersread.infrastructure.db.entity.UserEntity;
 import org.example.usersread.infrastructure.db.exception.UserNotFoundException;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class UserDbRepository implements UserRepository {
+public class UserDbRepository implements UserReadRepository, UserProjectionRepository {
 
     private final SpringDataUserRepository userRepository;
 

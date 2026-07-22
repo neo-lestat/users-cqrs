@@ -1,6 +1,6 @@
 package org.example.usersread.application.service;
 
-import org.example.usersread.application.repository.UserRepository;
+import org.example.usersread.application.repository.UserReadRepository;
 import org.example.usersread.domain.model.User;
 import org.example.usersread.domain.model.UserBuilder;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 class UserServiceTest {
 
     @Mock
-    private UserRepository userRepository;
+    private UserReadRepository userReadRepository;
 
     @InjectMocks
     private UserService userService;
@@ -30,7 +30,7 @@ class UserServiceTest {
     @Test
     void testGetUserReturnsUser() {
         User user = buildUser();
-        when(userRepository.findByUsername(any(String.class))).thenReturn(user);
+        when(userReadRepository.findByUsername(any(String.class))).thenReturn(user);
         User result = userService.getUser("test");
         assertEquals(user, result);
     }
@@ -39,7 +39,7 @@ class UserServiceTest {
     void testGetUsersReturnsPageOfUsers() {
         User user = buildUser();
         Page<User> userPage = new PageImpl<>(Collections.singletonList(user));
-        when(userRepository.findAll(any(PageRequest.class))).thenReturn(userPage);
+        when(userReadRepository.findAll(any(PageRequest.class))).thenReturn(userPage);
         Page<User> result = userService.getUsers(0, 1);
         assertEquals(userPage, result);
     }

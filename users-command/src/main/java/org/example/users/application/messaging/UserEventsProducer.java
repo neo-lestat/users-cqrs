@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface UserEventsProducer {
 
-    void sendUpdateMessage(User user);
+    void sendCreatedMessage(User user);
+
+    void sendUpdatedMessage(User user);
 
     void sendDeleteMessage(String username);
 
-    void sendUpdateMessage(List<User> userList);
+    void sendCreatedMessage(List<User> userList);
 }

@@ -24,13 +24,13 @@ public class UserService {
 
     public User saveUser(User user) {
         User userSaved = userRepository.save(user);
-        userEventsProducer.sendUpdateMessage(userSaved);
+        userEventsProducer.sendCreatedMessage(userSaved);
         return userSaved;
     }
 
     public User updateUser(String username, User user) {
         User userUpdated = userRepository.update(username, user);
-        userEventsProducer.sendUpdateMessage(userUpdated);
+        userEventsProducer.sendUpdatedMessage(userUpdated);
         return userUpdated;
     }
 
@@ -42,7 +42,7 @@ public class UserService {
     public List<User> generateUsers(int number) {
         List<User> userGeneratedList = userGenerator.generate(number);
         List<User> userList = userRepository.save(userGeneratedList);
-        userEventsProducer.sendUpdateMessage(userList);
+        userEventsProducer.sendCreatedMessage(userList);
         return userList;
     }
 }

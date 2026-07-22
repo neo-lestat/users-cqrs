@@ -3,7 +3,7 @@ package org.example.usersread.infrastructure.messaging;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.usersread.application.messaging.UserEventsListener;
-import org.example.usersread.application.service.UserService;
+import org.example.usersread.application.service.UserProjectionService;
 import org.example.usersread.domain.model.User;
 import org.example.usersread.infrastructure.messaging.dto.UserMessageDto;
 import org.example.usersread.infrastructure.messaging.mapper.UserMessageMapper;
@@ -26,15 +26,15 @@ public class UserEventsKafkaListener implements UserEventsListener {
 
     private final UserMessageMapper userMessageMapper;
     private final ObjectMapper objectMapper;
-    private final UserService userService;
+    private final UserProjectionService userProjectionService;
 
     @Autowired
     public UserEventsKafkaListener(ObjectMapper objectMapper,
                                    UserMessageMapper userMessageMapper,
-                                   UserService userService) {
+                                   UserProjectionService userProjectionService) {
         this.objectMapper = objectMapper;
         this.userMessageMapper = userMessageMapper;
-        this.userService = userService;
+        this.userProjectionService = userProjectionService;
     }
 
     private Optional<UserMessageDto> getUser(String data) {
@@ -52,15 +52,16 @@ public class UserEventsKafkaListener implements UserEventsListener {
     @KafkaListener(id = "updatemessage", topics = USERS_UPDATE_TOPIC, clientIdPrefix = "myClientId")
     public void listenUpdateMessage(String data) {
         getUser(data).ifPresent(userMessageDto -> {
+            LOGGER.info("Received event id={} type={} at={}", userMessageDto.eventId(), userMessageDto.eventType(), userMessageDto.occurredAt());
             User user = userMessageMapper.toDomain(userMessageDto);
-            userService.saveOrUpdate(user);
-            LOGGER.info("User updated: {}", user);
+            userProjectionService.saveOrUpdate(user);
+            LOGGER.info("User projected: {}", user);
         });
     }
 
     @KafkaListener(id = "deletemessage", topics = USERS_DELETE_TOPIC, clientIdPrefix = "myClientId")
     @Override
     public void listenDeleteMessage(String username) {
-        userService.delete(username);
+        userProjectionService.delete(username);
     }
 }

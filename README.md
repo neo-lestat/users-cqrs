@@ -3,7 +3,7 @@
 ### Requirements
 For test this project you will need
 
-* java 21
+* java 25
 * docker
 * gradle optional
 

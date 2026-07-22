@@ -49,7 +49,7 @@ public class UserServiceTest {
         User result = userService.saveUser(user);
 
         verify(userRepository, times(1)).save(user);
-        verify(userEventsProducer, times(1)).sendUpdateMessage(user);
+        verify(userEventsProducer, times(1)).sendCreatedMessage(user);
         assertEquals(user, result);
     }
 
@@ -62,7 +62,7 @@ public class UserServiceTest {
         User result = userService.updateUser(username, user);
 
         verify(userRepository, times(1)).update(username, user);
-        verify(userEventsProducer, times(1)).sendUpdateMessage(user);
+        verify(userEventsProducer, times(1)).sendUpdatedMessage(user);
         assertEquals(user, result);
     }
 
@@ -88,7 +88,7 @@ public class UserServiceTest {
 
         verify(userGenerator, times(1)).generate(2);
         verify(userRepository, times(1)).save(users);
-        verify(userEventsProducer, times(1)).sendUpdateMessage(users);
+        verify(userEventsProducer, times(1)).sendCreatedMessage(users);
         assertEquals(users, result);
     }
 

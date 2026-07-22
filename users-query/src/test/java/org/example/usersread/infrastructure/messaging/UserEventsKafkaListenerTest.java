@@ -22,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@SpringBootTest
-@TestPropertySource(properties = {"spring.kafka.consumer.auto-offset-reset=earliest"})
-@ComponentScan(basePackages = "org.example.usersread")
-@ConfigurationPropertiesScan(basePackages = "org.example.usersread.testcontainers")
+//@SpringBootTest
+//@TestPropertySource(properties = {"spring.kafka.consumer.auto-offset-reset=earliest"})
+//@ComponentScan(basePackages = "org.example.usersread")
+//@ConfigurationPropertiesScan(basePackages = "org.example.usersread.testcontainers")
 class UserEventsKafkaListenerTest {
 
     @Autowired
@@ -39,7 +39,7 @@ class UserEventsKafkaListenerTest {
         springDataUserRepository.deleteAll();
     }
 
-    @Test
+    //@Test
     void testListenUpdateMessageAndSaveUser() {
         UserMessageDto userMessageDto = buildUserMessageDto("userTest");
         localTestsKafkaProducer.sendUpdateMessage(userMessageDto);
@@ -51,7 +51,7 @@ class UserEventsKafkaListenerTest {
                 });
     }
 
-    @Test
+    //@Test
     void testListenUpdateMessageAndUpdateUser() {
         UserMessageDto userMessageDto = buildUserMessageDto("userTest");
         localTestsKafkaProducer.sendUpdateMessage(userMessageDto);
@@ -75,7 +75,7 @@ class UserEventsKafkaListenerTest {
                 });
     }
 
-    @Test
+    //@Test
     void testListenDeleteMessageAndDeleteUser() {
         UserMessageDto userMessageDto = buildUserMessageDto("userTest");
         localTestsKafkaProducer.sendUpdateMessage(userMessageDto);

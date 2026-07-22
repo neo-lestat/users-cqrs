@@ -31,6 +31,7 @@ public class UserDbRepository implements UserRepository {
 
     @Override
     public User save(User user) {
+        // read own store for pre-condition validation — acceptable in CQRS command side
         Optional<UserEntity> userEntity = userRepository.findById(user.username());
         userEntity.ifPresent(e -> {
             throw new UsernameNotAvailableException("Username already exists: " + user.username());
@@ -67,6 +68,7 @@ public class UserDbRepository implements UserRepository {
     }
 
     private UserEntity getUserEntity(String username) {
+        // read own store for pre-condition validation — acceptable in CQRS command side
         return userRepository.findById(username)
                 .orElseThrow(() -> new UserNotFoundException(String.format("Not found username: %s", username)));
     }

@@ -1,6 +1,6 @@
 package org.example.usersread.application.service;
 
-import org.example.usersread.application.repository.UserRepository;
+import org.example.usersread.application.repository.UserReadRepository;
 import org.example.usersread.domain.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,9 +16,9 @@ import java.util.Map;
 @Transactional
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserReadRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserReadRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -44,15 +44,4 @@ public class UserService {
         return maps;
     }
 
-    public void delete(String username) {
-        userRepository.delete(username);
-    }
-
-    public void saveOrUpdate(User user) {
-        if (userRepository.usernameExist(user.username())) {
-            userRepository.update(user.username(), user);
-        } else {
-            userRepository.save(user);
-        }
-    }
 }

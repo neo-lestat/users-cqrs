@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,15 +36,15 @@ public class UserResources {
     }
 
     @PostMapping
-    public ResponseEntity<UserDto> saveUser(@Valid @RequestBody UserDto userDto) {
-        return new ResponseEntity<>(userMapper.toDto(userService.saveUser(userMapper.toDomain(userDto))),
-                HttpStatus.CREATED);
+    public ResponseEntity<Void> saveUser(@Valid @RequestBody UserDto userDto) {
+        User saved = userService.saveUser(userMapper.toDomain(userDto));
+        return ResponseEntity.created(URI.create("/api/users/" + saved.username())).build();
     }
 
     @PutMapping("/{username}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable("username") String username, @Valid @RequestBody UserDto userDto) {
-        return new ResponseEntity<>(userMapper.toDto(userService.updateUser(username, userMapper.toDomain(userDto))),
-                HttpStatus.ACCEPTED);
+    public ResponseEntity<Void> updateUser(@PathVariable("username") String username, @Valid @RequestBody UserDto userDto) {
+        userService.updateUser(username, userMapper.toDomain(userDto));
+        return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{username}")
