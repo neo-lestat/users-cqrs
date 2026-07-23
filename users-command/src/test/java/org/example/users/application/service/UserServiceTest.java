@@ -5,7 +5,7 @@ import org.example.users.application.randomgenerator.UserGenerator;
 import org.example.users.application.repository.UserRepository;
 import org.example.users.domain.model.User;
 import org.example.users.domain.model.UserBuilder;
-import org.example.users.infrastructure.db.exception.UsernameNotAvailableException;
+import org.example.users.domain.exception.UsernameNotAvailableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -4,14 +4,15 @@ import org.example.usersread.domain.model.User;
 
 import org.example.usersread.domain.model.UserBuilder;
 import org.example.usersread.infrastructure.db.entity.UserEntity;
-import org.example.usersread.infrastructure.db.exception.UserNotFoundException;
-import org.example.usersread.infrastructure.db.exception.UsernameNotAvailableException;
+import org.example.usersread.domain.exception.UserNotFoundException;
+import org.example.usersread.domain.exception.UsernameNotAvailableException;
 import org.example.usersread.infrastructure.db.mapper.UserEntityMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.example.usersread.domain.model.PagedResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -79,8 +80,8 @@ class UserDbRepositoryTest {
         Page<UserEntity> pageUserEntity = new PageImpl<>(Collections.singletonList(new UserEntity()));
         when(springDataUserRepository.findAll(any(PageRequest.class))).thenReturn(pageUserEntity);
         when(userEntityMapper.toDomain(anyList())).thenReturn(Collections.singletonList(buildUser()));
-        Page<User> result = userDbRepository.findAll(PageRequest.of(0, 1));
-        assertEquals(1, result.getContent().size());
+        PagedResult<User> result = userDbRepository.findAll(0, 1);
+        assertEquals(1, result.content().size());
     }
 
     @Test

@@ -1,7 +1,7 @@
 package org.example.users.infrastructure.rest.resources;
 
 import jakarta.validation.Valid;
-import org.example.users.application.service.UserService;
+import org.example.users.application.usecase.UserCommandUseCase;
 import org.example.users.domain.model.User;
 import org.example.users.infrastructure.rest.dto.UserDto;
 import org.example.users.infrastructure.rest.mapper.UserMapper;
@@ -25,10 +25,10 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 public class UserResources {
 
-    private final UserService userService;
+    private final UserCommandUseCase userService;
     private final UserMapper userMapper;
 
-    public UserResources(UserService userService, UserMapper userMapper) {
+    public UserResources(UserCommandUseCase userService, UserMapper userMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
     }

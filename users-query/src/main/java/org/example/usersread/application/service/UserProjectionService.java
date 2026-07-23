@@ -1,11 +1,10 @@
 package org.example.usersread.application.service;
 
 import org.example.usersread.application.repository.UserProjectionRepository;
+import org.example.usersread.application.usecase.UserProjectionUseCase;
 import org.example.usersread.domain.model.User;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-public class UserProjectionService {
+public class UserProjectionService implements UserProjectionUseCase {
 
     private final UserProjectionRepository userProjectionRepository;
 
@@ -13,6 +12,7 @@ public class UserProjectionService {
         this.userProjectionRepository = userProjectionRepository;
     }
 
+    @Override
     public void saveOrUpdate(User user) {
         if (userProjectionRepository.usernameExist(user.username())) {
             userProjectionRepository.update(user.username(), user);
@@ -21,6 +21,7 @@ public class UserProjectionService {
         }
     }
 
+    @Override
     public void delete(String username) {
         userProjectionRepository.delete(username);
     }

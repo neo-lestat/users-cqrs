@@ -2,7 +2,7 @@ package org.example.usersread.infrastructure.messaging;
 
 import tools.jackson.databind.ObjectMapper;
 import org.example.usersread.application.messaging.UserEventsListener;
-import org.example.usersread.application.service.UserProjectionService;
+import org.example.usersread.application.usecase.UserProjectionUseCase;
 import org.example.usersread.domain.model.User;
 import org.example.usersread.infrastructure.messaging.dto.UserMessageDto;
 import org.example.usersread.infrastructure.messaging.mapper.UserMessageMapper;
@@ -25,11 +25,11 @@ public class UserEventsKafkaListener implements UserEventsListener {
 
     private final UserMessageMapper userMessageMapper;
     private final ObjectMapper objectMapper;
-    private final UserProjectionService userProjectionService;
+    private final UserProjectionUseCase userProjectionService;
 
     public UserEventsKafkaListener(ObjectMapper objectMapper,
                                    UserMessageMapper userMessageMapper,
-                                   UserProjectionService userProjectionService) {
+                                   UserProjectionUseCase userProjectionService) {
         this.objectMapper = objectMapper;
         this.userMessageMapper = userMessageMapper;
         this.userProjectionService = userProjectionService;

@@ -3,8 +3,8 @@ package org.example.users.infrastructure.db.repository;
 import org.example.users.domain.model.User;
 import org.example.users.domain.model.UserBuilder;
 import org.example.users.infrastructure.db.entity.UserEntity;
-import org.example.users.infrastructure.db.exception.UserNotFoundException;
-import org.example.users.infrastructure.db.exception.UsernameNotAvailableException;
+import org.example.users.domain.exception.UserNotFoundException;
+import org.example.users.domain.exception.UsernameNotAvailableException;
 
 import org.example.users.infrastructure.db.mapper.UserEntityMapper;
 import org.example.users.infrastructure.db.mapper.UserEntityMapperImpl;

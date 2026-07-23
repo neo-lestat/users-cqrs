@@ -1,9 +1,10 @@
 package org.example.users.infrastructure.config;
 
+import org.example.users.application.messaging.UserEventsProducer;
 import org.example.users.application.randomgenerator.UserGenerator;
 import org.example.users.application.repository.UserRepository;
 import org.example.users.application.service.UserService;
-import org.example.users.infrastructure.messaging.UserEventsKafkaProducer;
+import org.example.users.application.usecase.UserCommandUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,13 +20,13 @@ public class SpringBootServiceConfig {
     private PlatformTransactionManager transactionManager;
 
     @Bean
-    public UserService userService(UserRepository userRepository, UserGenerator userGenerator,
-                                   UserEventsKafkaProducer userEventsKafkaProducer) {
+    public UserCommandUseCase userService(UserRepository userRepository, UserGenerator userGenerator,
+                                          UserEventsProducer userEventsProducer) {
         TransactionProxyFactoryBean proxy = new TransactionProxyFactoryBean();
         // Inject transaction manager here
         proxy.setTransactionManager(transactionManager);
 
-        // Define wich object instance is to be proxied (your bean)
+        // Define which object instance is to be proxied (your bean)
         proxy.setTarget(new UserService(userRepository, userGenerator, userEventsKafkaProducer));
 
         // Programmatically setup transaction attributes
@@ -35,7 +36,7 @@ public class SpringBootServiceConfig {
 
         // Finish FactoryBean setup
         proxy.afterPropertiesSet();
-        return (UserService) proxy.getObject();
+        return (UserCommandUseCase) proxy.getObject();
     }
 
 }

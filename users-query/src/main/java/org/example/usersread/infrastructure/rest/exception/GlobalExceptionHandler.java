@@ -1,7 +1,7 @@
 package org.example.usersread.infrastructure.rest.exception;
 
-import org.example.usersread.infrastructure.db.exception.UserNotFoundException;
-import org.example.usersread.infrastructure.db.exception.UsernameNotAvailableException;
+import org.example.usersread.domain.exception.UserNotFoundException;
+import org.example.usersread.domain.exception.UsernameNotAvailableException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

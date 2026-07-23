@@ -2,14 +2,15 @@ package org.example.usersread.infrastructure.db.repository;
 
 import org.example.usersread.application.repository.UserProjectionRepository;
 import org.example.usersread.application.repository.UserReadRepository;
+import org.example.usersread.domain.exception.UserNotFoundException;
+import org.example.usersread.domain.exception.UsernameNotAvailableException;
+import org.example.usersread.domain.model.PagedResult;
 import org.example.usersread.domain.model.User;
 import org.example.usersread.infrastructure.db.entity.UserEntity;
-import org.example.usersread.infrastructure.db.exception.UserNotFoundException;
-import org.example.usersread.infrastructure.db.exception.UsernameNotAvailableException;
 import org.example.usersread.infrastructure.db.mapper.UserEntityMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,9 @@ import java.util.Optional;
 public class UserDbRepository implements UserReadRepository, UserProjectionRepository {
 
     private final SpringDataUserRepository userRepository;
-
     private final UserEntityMapper userMapper;
 
-    public UserDbRepository(SpringDataUserRepository userRepository,
-                            UserEntityMapper userMapper) {
+    public UserDbRepository(SpringDataUserRepository userRepository, UserEntityMapper userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
     }
@@ -42,9 +41,13 @@ public class UserDbRepository implements UserReadRepository, UserProjectionRepos
     }
 
     @Override
-    public Page<User> findAll(Pageable pageable) {
-        Page<UserEntity> pageUserEntity = userRepository.findAll(pageable);
-        return new PageImpl<>(userMapper.toDomain(pageUserEntity.getContent()), pageable, pageUserEntity.getTotalElements());
+    public PagedResult<User> findAll(int pageNumber, int pageSize) {
+        Page<UserEntity> pageUserEntity = userRepository.findAll(
+                PageRequest.of(pageNumber, pageSize, Sort.by("username")));
+        return new PagedResult<>(
+                userMapper.toDomain(pageUserEntity.getContent()),
+                pageUserEntity.getTotalPages(),
+                pageUserEntity.getTotalElements());
     }
 
     @Override
@@ -70,8 +73,6 @@ public class UserDbRepository implements UserReadRepository, UserProjectionRepos
 
     @Override
     public void delete(String username) {
-        userRepository.findById(username)
-                        .ifPresent(userRepository::delete);
+        userRepository.findById(username).ifPresent(userRepository::delete);
     }
-
 }
